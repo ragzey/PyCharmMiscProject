@@ -33,6 +33,7 @@ def put_bsm(s, k, r, t, sigma):
 #greeks
 #delta - symbolic finite differences
 # using autograd
+
 delta_c = grad(call_bsm, 0)
 delta_p = grad(put_bsm, 0)
 #gamma - second order diff
