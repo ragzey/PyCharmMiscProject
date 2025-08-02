@@ -50,9 +50,6 @@ def get_greeks(call_bsm, put_bsm, s, k, r, t, sigma):
 
 # option volatility heat map (volatility against spot prices) - maintaining constant strike price of 100
 #fixed values
-r1 = r
-t1 = t
-k1 = k
 #varying values
 
 def vol_heat_map(call_bsm, put_bsm, s, k, r, t, sigma):
@@ -78,16 +75,9 @@ def vol_heat_map(call_bsm, put_bsm, s, k, r, t, sigma):
 
     return heat_array_c, heat_array_p
 
-plt.imshow(heat_array_c, cmap="viridis", extent=[vol_list[0], vol_list[-1], s_list[0], s_list[-1]], aspect='auto', origin='lower')
-plt.colorbar(label='Option Price')
-plt.xlabel("Volatility sigma")
-plt.ylabel("Spot Price s")
-plt.title("call option price heatmap")
-
-
-plt.imshow(heat_array_p, cmap="viridis", extent=[vol_list[0], vol_list[-1], s_list[0], s_list[-1]], aspect='auto', origin='lower')
-plt.colorbar(label='Option Price')
-plt.xlabel("Volatility sigma")
-plt.ylabel("Spot Price s")
-plt.title("Put option price heatmap")
-
+def plot_heatmap(data, s_list, vol_list, title):
+    plt.imshow(data, cmap="viridis", extent=[vol_list[0], vol_list[-1], s_list[0], s_list[-1]], aspect='auto', origin='lower')
+    plt.colorbar(label='Option Price')
+    plt.xlabel("Volatility sigma")
+    plt.ylabel("Spot Price s")
+    plt.title(title)
