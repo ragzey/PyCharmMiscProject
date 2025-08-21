@@ -39,8 +39,6 @@ def get_greeks(call_bsm, put_bsm, s, k, r, t, sigma):
     return greeks
 
 # option volatility heat map (volatility against spot prices) - maintaining constant strike price of 100
-#fixed values
-#varying values
 
 def vol_heat_map(call_bsm, put_bsm, s, k, r, t, sigma):
     s_list = np.linspace(70, 130, 10)
