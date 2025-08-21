@@ -24,27 +24,17 @@ def put_bsm(s, k, r, t, sigma):
 #greeks
 # using autograd
 def get_greeks(call_bsm, put_bsm, s, k, r, t, sigma):
-    delta_c = grad(call_bsm, 0)
-    delta_p = grad(put_bsm, 0)
-    gamma_c = grad(delta_c)
-    gamma_p = grad(delta_p)
-    vega_c = grad(call_bsm,4)
-    vega_p = grad(put_bsm,4)
-    theta_c = grad(call_bsm,3)
-    theta_p = grad(put_bsm,3)
-    rho_c = grad(call_bsm,2)
-    rho_p = grad(put_bsm,2)
     greeks = {
-        'delta_c' : delta_c,
-        'delta_p' : delta_p,
-        'gamma_c' : gamma_c,
-        'gamma_p' : gamma_p,
-        'vega_c' : vega_c,
-        'vega_p' : vega_p,
-        'theta_c' : theta_c,
-        'theta_p' : theta_p,
-        'rho_c' : rho_c,
-        'rho_p' : rho_p,
+        'delta_c': grad(call_bsm, 0)(s, k, r, t, sigma),
+        'delta_p': grad(put_bsm, 0)(s, k, r, t, sigma),
+        'gamma_c': grad(grad(call_bsm, 0), 0)(s, k, r, t, sigma),
+        'gamma_p': grad(grad(put_bsm, 0), 0)(s, k, r, t, sigma),
+        'vega_c': grad(call_bsm, 4)(s, k, r, t, sigma),
+        'vega_p': grad(put_bsm, 4)(s, k, r, t, sigma),
+        'theta_c': grad(call_bsm, 3)(s, k, r, t, sigma),
+        'theta_p': grad(put_bsm, 3)(s, k, r, t, sigma),
+        'rho_c': grad(call_bsm, 2)(s, k, r, t, sigma),
+        'rho_p': grad(put_bsm, 2)(s, k, r, t, sigma),
     }
     return greeks
 
@@ -63,17 +53,17 @@ def vol_heat_map(call_bsm, put_bsm, s, k, r, t, sigma):
 
     for i, s in enumerate(s_list):
         for j, sigma in enumerate(vol_list):
-            price = call_bsm(s, k1, r1, t1, sigma)
+            price = call_bsm(s, k, r, t, sigma)
             heat_array_c[i][j] = price
 
     heat_array_p = np.zeros((len(s_list), len(vol_list)))
 
     for i, s in enumerate(s_list):
         for j, sigma in enumerate(vol_list):
-            price = put_bsm(s, k1, r1, t1, sigma)
+            price = put_bsm(s, k, r, t, sigma)
             heat_array_p[i][j] = price
 
-    return heat_array_c, heat_array_p
+    return heat_array_c, heat_array_p, s_list, vol_list
 
 def plot_heatmap(data, s_list, vol_list, title):
     plt.imshow(data, cmap="viridis", extent=[vol_list[0], vol_list[-1], s_list[0], s_list[-1]], aspect='auto', origin='lower')
